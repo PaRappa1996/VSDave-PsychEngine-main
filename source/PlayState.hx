@@ -5,6 +5,7 @@ import Discord.DiscordClient;
 #end
 import Section.SwagSection;
 import Song.SwagSong;
+import Shaders.PulseEffect;
 import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
@@ -131,6 +132,10 @@ class PlayState extends MusicBeatState
 	public var eventNotes:Array<Dynamic> = [];
 
 	private var strumLine:FlxSprite;
+	
+	public static var screenshader:Shaders.PulseEffect = new PulseEffect();
+	
+	public var curbg:FlxSprite;
 
 	//Handles the new epic mega sexy cam code that i've done
 	private var camFollow:FlxPoint;
@@ -670,6 +675,13 @@ switch (curStage)
 				bg.scrollFactor.set(0.75, 0.75);
 				bg.active = false;
 				add(bg);
+				var testshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
+				testshader.waveAmplitude = 0.1;
+				testshader.waveFrequency = 5;
+				testshader.waveSpeed = 2;
+				bg.shader = testshader.shader;
+				curbg = bg;
+			}
 
 				case 'bambisFarm': //Week Bambi
 				var bg:BGSprite = new BGSprite('sky', -600, -200, 0.9, 0.9);
@@ -841,6 +853,13 @@ switch (curStage)
 				bg.scrollFactor.set(0.75, 0.75);
 				bg.active = false;
 				add(bg);
+				var testshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
+				testshader.waveAmplitude = 0.1;
+				testshader.waveFrequency = 5;
+				testshader.waveSpeed = 2;
+				bg.shader = testshader.shader;
+				curbg = bg;
+			}
 
 				case 'glitchy-void': //Week UNFAIR
 				var bg:BGSprite = new BGSprite('scarybg', -600, -200, 0.9, 0.9);
@@ -848,6 +867,13 @@ switch (curStage)
 				bg.scrollFactor.set(0.75, 0.75);
 				bg.active = false;
 				add(bg);
+				var testshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
+				testshader.waveAmplitude = 0.1;
+				testshader.waveFrequency = 5;
+				testshader.waveSpeed = 2;
+				bg.shader = testshader.shader;
+				curbg = bg;
+			}
 
 		}
 
@@ -920,6 +946,14 @@ switch (curStage)
 		blammedLightsBlack = modchartSprites.get('blammedLightsBlack');
 		blammedLightsBlack.alpha = 0.0;
 		#end
+			
+		#if windows
+		screenshader.waveAmplitude = 1;
+		screenshader.waveFrequency = 2;
+		screenshader.waveSpeed = 1;
+		screenshader.shader.uTime.value[0] = new flixel.math.FlxRandom().float(-100000, 100000);
+		#end
+
 
 		var gfVersion:String = SONG.player3;
 		if(gfVersion == null || gfVersion.length < 1) {
@@ -2038,6 +2072,16 @@ switch (curStage)
 
 	override public function update(elapsed:Float)
 	{
+		#if windows
+	if (curbg != null)
+	{
+		if (curbg.active) // only the furiosity background is active
+		{
+			var shad = cast(curbg.shader, Shaders.GlitchShader);
+			shad.uTime.value[0] += elapsed;
+		}
+	}
+	#end
 		/*if (FlxG.keys.justPressed.NINE)
 		{
 			iconP1.swapOldIcon();
@@ -2321,6 +2365,14 @@ switch (curStage)
 			trace("RESET = True");
 		}
 		doDeathCheck();
+				
+				#if windows
+		if (curSong.toLowerCase() == 'furiosity')
+			{
+				screenshader.shader.uampmul.value[0] = 0;
+				screenshader.Enabled = false;
+			}
+		#end
 
 		var roundedSpeed:Float = FlxMath.roundDecimal(SONG.speed, 2);
 		if (unspawnNotes[0] != null)

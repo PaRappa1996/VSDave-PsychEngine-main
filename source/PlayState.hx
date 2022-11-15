@@ -69,10 +69,10 @@ class PlayState extends MusicBeatState
 		['Bruh', 0.6], //From 50% to 59%
 		['Meh', 0.69], //From 60% to 68%
 		['Nice', 0.7], //69%
-		['Good!', 0.8], //From 70% to 79%
-		['Great!', 0.9], //From 80% to 89%
-		['Sick!!', 1], //From 90% to 99%
-		['Perfect!!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+		['Good', 0.8], //From 70% to 79%
+		['Great', 0.9], //From 80% to 89%
+		['Sick!', 1], //From 90% to 99%
+		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 
 	
@@ -947,12 +947,12 @@ switch (curStage)
 		blammedLightsBlack.alpha = 0.0;
 		#end
 			
-		#if windows
+		
 		screenshader.waveAmplitude = 1;
 		screenshader.waveFrequency = 2;
 		screenshader.waveSpeed = 1;
 		screenshader.shader.uTime.value[0] = new flixel.math.FlxRandom().float(-100000, 100000);
-		#end
+		
 
 
 		var gfVersion:String = SONG.player3;
@@ -2072,7 +2072,7 @@ switch (curStage)
 
 	override public function update(elapsed:Float)
 	{
-		#if windows
+		
 	if (curbg != null)
 	{
 		if (curbg.active) // only the furiosity background is active
@@ -2081,7 +2081,7 @@ switch (curStage)
 			shad.uTime.value[0] += elapsed;
 		}
 	}
-	#end
+	
 		/*if (FlxG.keys.justPressed.NINE)
 		{
 			iconP1.swapOldIcon();
@@ -2366,13 +2366,11 @@ switch (curStage)
 		}
 		doDeathCheck();
 				
-				#if windows
 		if (curSong.toLowerCase() == 'furiosity')
 			{
 				screenshader.shader.uampmul.value[0] = 0;
 				screenshader.Enabled = false;
 			}
-		#end
 
 		var roundedSpeed:Float = FlxMath.roundDecimal(SONG.speed, 2);
 		if (unspawnNotes[0] != null)
